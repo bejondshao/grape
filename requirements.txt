@@ -1,0 +1,6 @@
+pymongo
+configparser
+pandas
+tushare
+json
+bson
