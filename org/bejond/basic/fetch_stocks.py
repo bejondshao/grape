@@ -3,9 +3,6 @@
 
 import tushare as ts
 import json
-
-from datetime import datetime
-
 import persistance
 from bejond.basic.util import dateu
 
@@ -44,6 +41,8 @@ def save_stock_hist(start=None, end=None):
 
     # persistance.database.drop_collection('stock_hist')
     collection_code = persistance.database.get_collection('stock_hist')
+    collection_code.create_index([('code', 1), ('date', -1)])
+    print 'index created'
     i = 1
     for code in codes:
         last_date = None
@@ -56,7 +55,7 @@ def save_stock_hist(start=None, end=None):
         print i
         print code
         last_date = get_last_date(code, collection_code)
-        print 'last_date' + last_date
+        print 'last_date ' + str(last_date)
 
         df_hist_data = None
         if last_date is None: # 如果数据库未找到上一次存储的日期，说明是新股票
