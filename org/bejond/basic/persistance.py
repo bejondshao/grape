@@ -2,6 +2,7 @@
 # -*- coding: UTF-8 -*-
 
 from pymongo import MongoClient
+import pymongo
 import configparser
 import os
 
