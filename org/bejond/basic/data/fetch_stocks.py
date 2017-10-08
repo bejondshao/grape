@@ -40,21 +40,21 @@ def save_stock_hist(start=None, end=None):
 
     codes = save_stock_basics(const.STOCK_BASICS)
 
-    # persistance.database.drop_collection('stock_hist')
+    # persistence.database.drop_collection('stock_hist')
     collection_code = bejond.basic.persistence.database.get_collection(const.STOCK_HIST)
     i = 1
     for code in codes:
         last_date = None
-        # persistance.database.drop_collection(code)
+        # persistence.database.drop_collection(code)
         #if collection_code is not None:
         # last_result = collection_code.find({}).sort('date', -1).limit(1)
         #    last_result = collection_code.find({}).sort({'date': -1}).limit(1)
 
         #df_hist_data = None
-        print i
-        print code
+        print(i)
+        print(code)
         last_date = get_last_date(code, collection_code)
-        print 'last_date ' + str(last_date)
+        print('last_date ' + str(last_date))
 
         if last_date is None: # 如果数据库未找到上一次存储的日期，说明是新股票
             df_hist_data = ts.get_hist_data(code, end)
@@ -63,7 +63,7 @@ def save_stock_hist(start=None, end=None):
             # if next_trade_date < datetime.now():
             df_hist_data = ts.get_hist_data(code, dateu.get_next_date_str(last_date), end)
         if df_hist_data is not None and len(df_hist_data.index) > 0:
-            print df_hist_data.index
+            print(df_hist_data.index)
             df_hist_data = df_hist_data.reset_index() # 将date(string)移到列中
             df_hist_data['code'] = code
             collection_code.insert(json.loads(df_hist_data.to_json(orient='records')))
