@@ -41,8 +41,6 @@ def save_stock_hist(start=None, end=None):
 
     # persistance.database.drop_collection('stock_hist')
     collection_code = persistance.database.get_collection('stock_hist')
-    collection_code.create_index([('code', 1), ('date', -1)])
-    print 'index created'
     i = 1
     for code in codes:
         last_date = None
@@ -57,7 +55,6 @@ def save_stock_hist(start=None, end=None):
         last_date = get_last_date(code, collection_code)
         print 'last_date ' + str(last_date)
 
-        df_hist_data = None
         if last_date is None: # 如果数据库未找到上一次存储的日期，说明是新股票
             df_hist_data = ts.get_hist_data(code, end)
         else: # 如果找到上次存储的日期
@@ -72,4 +69,4 @@ def save_stock_hist(start=None, end=None):
         i += 1
 
 
-save_stock_hist(start='2014-08-01')
+save_stock_hist()

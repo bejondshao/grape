@@ -17,4 +17,4 @@ def get_last_date(code, collection_code):
     return None
 
 
-get_last_date('000868', collection_code = persistance.database.get_collection('stock_hist'))
+# get_last_date('000868', collection_code = persistance.database.get_collection('stock_hist'))
