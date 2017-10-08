@@ -2,7 +2,7 @@
 # -*- coding: UTF-8 -*-
 import tushare as ts
 import json
-from bejond.basic import persistance
+from bejond.basic import persistence
 
 
 def get_last_date(code, collection_code):
