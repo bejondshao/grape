@@ -3,7 +3,8 @@
 
 import tushare as ts
 import json
-import persistance
+import bejond.basic.persistance
+from bejond.basic import const
 from bejond.basic.util import dateu
 
 
@@ -17,8 +18,8 @@ def save_stock_basics(collection):
     df_stock_basics.rename(columns = {'esp':'eps'}, inplace = True)  # 重命名列esp改为eps
     df_stock_basics = df_stock_basics.reset_index() # 将code(string)移到列中
     # 删除stock_basics列表，更新股票信息
-    persistance.database.drop_collection(collection)
-    stock_basics = persistance.database[collection]
+    bejond.basic.persistance.database.drop_collection(collection)
+    stock_basics = bejond.basic.persistance.database[collection]
 
     stock_basics.insert(json.loads(df_stock_basics.to_json(orient='records')))
     return df_stock_basics['code']
@@ -37,10 +38,10 @@ def get_last_date(code, collection_code):
 
 def save_stock_hist(start=None, end=None):
 
-    codes = save_stock_basics('stock_basics')
+    codes = save_stock_basics(const.STOCK_BASICS)
 
     # persistance.database.drop_collection('stock_hist')
-    collection_code = persistance.database.get_collection('stock_hist')
+    collection_code = bejond.basic.persistance.database.get_collection(const.STOCK_HIST)
     i = 1
     for code in codes:
         last_date = None
