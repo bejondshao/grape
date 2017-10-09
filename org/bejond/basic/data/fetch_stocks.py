@@ -1,10 +1,11 @@
 # !/usr/bin/python
 # -*- coding: UTF-8 -*-
-
-import tushare as ts
+import pandas
+import tushare
 import json
 import bejond.basic.persistence
 from bejond.basic import const
+from bejond.basic.data.ma import mas
 from bejond.basic.util import dateu
 
 
@@ -14,7 +15,7 @@ def save_stock_basics(collection):
     :param collection: 存储的collection名
     :return:
     """
-    df_stock_basics = ts.get_stock_basics()
+    df_stock_basics = tushare.get_stock_basics()
     df_stock_basics.rename(columns={'esp': 'eps'}, inplace=True)  # 重命名列esp改为eps
     df_stock_basics = df_stock_basics.reset_index() # 将code(string)移到列中
     # 删除stock_basics列表，更新股票信息
@@ -36,12 +37,12 @@ def get_last_date(code, collection_code):
     return None
 
 
-def save_stock_hist(start=None, end=None):
+def save_stock_k_hist():
 
     codes = save_stock_basics(const.STOCK_BASICS)
 
     # persistence.database.drop_collection('stock_hist')
-    collection_code = bejond.basic.persistence.database.get_collection(const.STOCK_HIST)
+    collection_code = bejond.basic.persistence.database.get_collection(const.STOCK_K_HIST)
     i = 1
     for code in codes:
         last_date = None
@@ -57,17 +58,20 @@ def save_stock_hist(start=None, end=None):
         print('last_date ' + str(last_date))
 
         if last_date is None: # 如果数据库未找到上一次存储的日期，说明是新股票
-            df_hist_data = ts.get_hist_data(code, end)
+            df_k_data = tushare.get_k_data(code)
         else: # 如果找到上次存储的日期
             # next_trade_date = dateu.get_next_trade_date(last_date) # 获取下个交易日，is_holiday读取csv速度太慢，放弃
             # if next_trade_date < datetime.now():
-            df_hist_data = ts.get_hist_data(code, dateu.get_next_date_str(last_date), end)
-        if df_hist_data is not None and len(df_hist_data.index) > 0:
-            print(df_hist_data.index)
-            df_hist_data = df_hist_data.reset_index() # 将date(string)移到列中
-            df_hist_data['code'] = code
-            collection_code.insert(json.loads(df_hist_data.to_json(orient='records')))
+            df_k_data = tushare.get_k_data(code, dateu.get_next_date_str(last_date))
+        if df_k_data is not None and len(df_k_data.index) > 0:
+            print(df_k_data.index)
+
+            df_k_data = mas(const.DAYS_ARRAY, df_k_data)
+
+            df_k_data = df_k_data.reset_index()  # 将date(string)移到列中
+
+            collection_code.insert(json.loads(df_k_data.to_json(orient='records')))
         i += 1
 
 
-save_stock_hist()
+save_stock_k_hist()

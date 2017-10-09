@@ -2,7 +2,7 @@
 # -*- coding: UTF-8 -*-
 from collections import deque
 
-import tushare as ts
+import tushare
 import json
 from bejond.basic import persistence
 
@@ -29,3 +29,13 @@ print(val)
 print(len(val))
 val.append('d')
 print(val)
+left = val.popleft()
+print(left)
+print(val)
+right = val.append('e')
+print(right)
+print(val)
+
+a = 1.0
+a = a + 6 - 3
+print(a)
