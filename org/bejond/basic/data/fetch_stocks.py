@@ -15,7 +15,7 @@ def save_stock_basics(collection):
     :return:
     """
     df_stock_basics = ts.get_stock_basics()
-    df_stock_basics.rename(columns = {'esp':'eps'}, inplace = True)  # 重命名列esp改为eps
+    df_stock_basics.rename(columns={'esp': 'eps'}, inplace=True)  # 重命名列esp改为eps
     df_stock_basics = df_stock_basics.reset_index() # 将code(string)移到列中
     # 删除stock_basics列表，更新股票信息
     bejond.basic.persistence.database.drop_collection(collection)
