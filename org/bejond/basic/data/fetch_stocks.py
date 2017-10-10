@@ -4,6 +4,7 @@ import time
 import tushare
 import json
 import bejond.basic.persistence
+import bejond.basic.util.timing
 from bejond.basic import const
 from bejond.basic.data.ma import mas
 from bejond.basic.util import dateu
