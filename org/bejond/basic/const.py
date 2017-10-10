@@ -5,6 +5,14 @@ STOCK_BASICS = 'stock_basics'
 STOCK_HIST = 'stock_hist_copy'
 
 DAYS_ARRAY = [30, 60]
+STOCK_HIST_COLUMNS = ['high', 'v_ma10', 'code', 'ma5', 'ma10', 'price_change', 'v_ma20', 'p_change',
+                      'volume', 'ma20', 'low', 'date', 'close', '_id', 'open', 'v_ma5', 'turnover', 'ma_30', 'ma_60']
+'''
+    pandas.itertuples()方法在遍历DataFrame为一个个Pandas对象时，不允许使用下划线开头的列名，因此用id代替
+'''
+STOCK_HIST_SIMPLE_COLUMNS = ['_id', 'code', 'date', 'close']
+PANDAS_DATA_FRAME_ID = 'id'
+STOCK_HIST_MONGO_ID = '_id'
 
 HOLIDAY_2016 = ['2016-01-01', '2016-01-02', '2016-01-03', '2016-02-07', '2016-02-08', '2016-02-09', '2016-02-10',
                 '2016-02-11', '2016-02-12', '2016-02-13', '2016-04-02', '2016-04-03', '2016-04-04', '2016-04-30',

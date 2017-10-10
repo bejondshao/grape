@@ -2,6 +2,7 @@
 # -*- coding: UTF-8 -*-
 from __future__ import division
 
+import json
 from collections import deque
 
 import pandas
@@ -87,3 +88,37 @@ def fix_mas(days, df_hist_data):
             ma = data_total.total / days
 
 
+def repair_mas(collection, code, days_array):
+    """
+
+    :param collection: 历史数据库
+    :param code: 股票代码
+    :param days_array: 要求的均线日期数组，比如[5, 10, 20, 30, 60]
+    :return: 修复后的数据
+    """
+    stock_hist = collection.find(
+        {'code': code},
+        {'_id': 1,
+         'code': 1,
+         'date': 1,
+         'close': 1}
+    ).sort([('date', 1)])
+
+    df = pandas.DataFrame(list(stock_hist), columns=const.STOCK_HIST_SIMPLE_COLUMNS)
+    df.rename(columns={const.STOCK_HIST_MONGO_ID: const.PANDAS_DATA_FRAME_ID}, inplace=True)  # 重命名列_id改为id
+    for days in days_array:
+        df['ma_' + str(days)] = pandas.Series(df['close']).rolling(window=days).mean()
+
+    for row in df.itertuples():
+        collection.update(
+            {
+                const.STOCK_HIST_MONGO_ID: getattr(row, const.PANDAS_DATA_FRAME_ID)  # id
+            },
+            {
+                '$set':
+                    {
+                        'ma_30': getattr(row, 'ma_30'),  # ma_30
+                        'ma_60': getattr(row, 'ma_60')  # ma_60
+                    }
+            }
+        )

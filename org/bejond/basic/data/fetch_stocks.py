@@ -3,14 +3,14 @@
 import time
 import tushare
 import json
-import bejond.basic.persistence
 import bejond.basic.util.timing
-from bejond.basic import const
+from bejond.basic import const, persistence
+from bejond.basic.data import ma
 from bejond.basic.data.ma import mas
 from bejond.basic.util import dateu
 
 
-def save_stock_basics(collection):
+def save_stock_basics(collection_name):
     """
 
     :param collection: 存储的collection名
@@ -18,10 +18,10 @@ def save_stock_basics(collection):
     """
     df_stock_basics = tushare.get_stock_basics()
     df_stock_basics.rename(columns={'esp': 'eps'}, inplace=True)  # 重命名列esp改为eps
-    df_stock_basics = df_stock_basics.reset_index() # 将code(string)移到列中
+    df_stock_basics = df_stock_basics.reset_index()  # 将code(string)移到列中
     # 删除stock_basics列表，更新股票信息
-    bejond.basic.persistence.database.drop_collection(collection)
-    stock_basics = bejond.basic.persistence.database[collection]
+    persistence.database.drop_collection(collection_name)
+    stock_basics = persistence.database[collection_name]
 
     stock_basics.insert(json.loads(df_stock_basics.to_json(orient='records')))
     return df_stock_basics['code']
@@ -39,13 +39,18 @@ def get_last_date(code, collection_code):
 
 
 def save_stock_hist(checks=None):
+    """
+    更新股票历史，建议每日收盘后运行。因为收盘前运行当日数据会有误
+    :param checks: 临时更新某些股票的历史，节省时间。checks=None时更新所有股票历史
+    :return:
+    """
 
     start = time.time()
     print(start)
     codes = save_stock_basics(const.STOCK_BASICS)
 
     # persistence.database.drop_collection('stock_hist')
-    collection = bejond.basic.persistence.database.get_collection(const.STOCK_HIST)
+    collection = persistence.database.get_collection(const.STOCK_HIST)
     i = 1
     if checks is not None:
         codes = checks
@@ -89,4 +94,20 @@ def save_stock_hist(checks=None):
     print("Time: " + str(end - start))
 
 
+def repair_mas():
+    """
+    只是用于修复之前获取的数据，并未求ma_30和ma_60。新数据库不会用到该函数。除非要增加新的平均线
+    :return:
+    """
+    codes = save_stock_basics(const.STOCK_BASICS)
+    collection = persistence.database.get_collection(const.STOCK_HIST)
+    i = 1
+    for code in codes:
+        print(i)
+        print("Repairing mas. Code: " + code)
+        ma.repair_mas(collection, code, const.DAYS_ARRAY)
+        i += 1
+
+
+# repair_mas()
 save_stock_hist(checks=['000800', '000801'])

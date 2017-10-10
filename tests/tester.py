@@ -4,7 +4,8 @@ from collections import deque
 
 import tushare
 import json
-from bejond.basic import persistence
+from bejond.basic import persistence, const
+from bejond.basic.data import ma
 
 
 def get_last_date(code, collection_code):
@@ -42,3 +43,12 @@ print(a)
 
 df = tushare.get_k_data(code='000800', start='2017-10-01', end='2017-11-11')
 print(df)
+
+collection = persistence.database.get_collection(const.STOCK_HIST)
+cursor = collection.find_one()
+for key in cursor:
+    print(key)
+
+
+collection_code = persistence.database.get_collection(const.STOCK_BASICS)
+ma.repair_mas(collection, '000800', const.DAYS_ARRAY)
