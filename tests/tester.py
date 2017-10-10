@@ -39,3 +39,6 @@ print(val)
 a = 1.0
 a = a + 6 - 3
 print(a)
+
+df = tushare.get_k_data(code='000800', start='2017-10-01', end='2017-11-11')
+print(df)
