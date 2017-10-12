@@ -1,9 +1,6 @@
 # !/usr/bin/python
 # -*- coding: UTF-8 -*-
 
-STOCK_BASICS = 'stock_basics'
-STOCK_HIST = 'stock_hist_copy'
-
 DAYS_ARRAY = [30, 60]
 STOCK_HIST_COLUMNS = ['high', 'v_ma10', 'code', 'ma5', 'ma10', 'price_change', 'v_ma20', 'p_change',
                       'volume', 'ma20', 'low', 'date', 'close', '_id', 'open', 'v_ma5', 'turnover', 'ma_30', 'ma_60']

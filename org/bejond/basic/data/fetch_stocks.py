@@ -4,7 +4,7 @@ import time
 import tushare
 import json
 import bejond.basic.util.timing
-from bejond.basic import const, persistence
+from bejond.basic import const, conn
 from bejond.basic.data import ma
 from bejond.basic.data.ma import mas
 from bejond.basic.util import dateu
@@ -20,8 +20,8 @@ def save_stock_basics(collection_name):
     df_stock_basics.rename(columns={'esp': 'eps'}, inplace=True)  # 重命名列esp改为eps
     df_stock_basics = df_stock_basics.reset_index()  # 将code(string)移到列中
     # 删除stock_basics列表，更新股票信息
-    persistence.database.drop_collection(collection_name)
-    stock_basics = persistence.database[collection_name]
+    conn.database.drop_collection(collection_name)
+    stock_basics = conn.database[collection_name]
 
     stock_basics.insert(json.loads(df_stock_basics.to_json(orient='records')))
     return df_stock_basics['code']
@@ -47,10 +47,10 @@ def save_stock_hist(checks=None):
 
     start = time.time()
     print(start)
-    codes = save_stock_basics(const.STOCK_BASICS)
+    codes = save_stock_basics(conn.stock_basics)
 
     # persistence.database.drop_collection('stock_hist')
-    collection = persistence.database.get_collection(const.STOCK_HIST)
+
     i = 1
     if checks is not None:
         codes = checks
@@ -64,7 +64,7 @@ def save_stock_hist(checks=None):
         #df_hist_data = None
         print(i)
         print(code)
-        last_date = get_last_date(code, collection)
+        last_date = get_last_date(code, conn.collection_stock_hist)
         print('last_date ' + str(last_date))
 
         if last_date is None: # 如果数据库未找到上一次存储的日期，说明是新股票
@@ -86,10 +86,11 @@ def save_stock_hist(checks=None):
             df_hist_data = df_hist_data.reset_index()  # 将date(string)移到列中。
             df_hist_data['code'] = code
 
-            df_hist_data = mas(collection, code, const.DAYS_ARRAY, df_hist_data)
+            df_hist_data = mas(conn.collection_stock_hist, code, const.DAYS_ARRAY, df_hist_data)
 
-            collection.insert(json.loads(df_hist_data.to_json(orient='records')))
+            conn.collection_stock_hist.insert(json.loads(df_hist_data.to_json(orient='records')))
         i += 1
+
     end = time.time()
     print("Time: " + str(end - start))
 
@@ -99,15 +100,14 @@ def repair_mas():
     只是用于修复之前获取的数据，并未求ma_30和ma_60。新数据库不会用到该函数。除非要增加新的平均线
     :return:
     """
-    codes = save_stock_basics(const.STOCK_BASICS)
-    collection = persistence.database.get_collection(const.STOCK_HIST)
+    codes = save_stock_basics(conn.stock_basics)
     i = 1
     for code in codes:
         print(i)
         print("Repairing mas. Code: " + code)
-        ma.repair_mas(collection, code, const.DAYS_ARRAY)
+        ma.repair_mas(conn.collection_stock_hist, code, const.DAYS_ARRAY)
         i += 1
 
 
 # repair_mas()
-save_stock_hist(checks=['000800', '000801'])
+save_stock_hist()

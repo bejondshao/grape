@@ -2,25 +2,21 @@
 # -*- coding: UTF-8 -*-
 from __future__ import division
 
-import json
+from bejond.basic.data.data_total import DataTotal
+from org.bejond.basic import conn
+from bejond.basic import const
 from collections import deque
 
 import pandas
 
-from bejond.basic.data.data_total import DataTotal
-from org.bejond.basic import persistence
-from bejond.basic import const
-
 
 def ma(days):
-    collection_code = persistence.database.get_collection(const.STOCK_HIST)
-    codes = list(persistence.database.get_collection(const.STOCK_BASICS).find({}, {'code': 1, '_id': 0}))
+    codes = list(conn.collection_stock_basics.find({}, {'code': 1, '_id': 0}))
     for code in codes:
         print(code['code'])
 
     for code in codes:
-        code = {'code':'000800'}
-        stock_hist = collection_code.find({'code': code['code']}).sort([('date', 1)])
+        stock_hist = conn.collection_stock_hist.find({'code': code['code']}).sort([('date', 1)])
         if stock_hist.count() >= days:
             values = deque(maxlen=days)
             for i in range(0, days):
@@ -77,9 +73,8 @@ def fix_mas(days, df_hist_data):
     :param df_hist_data: 增加均线后的每日交易信息, DataFrame。针对数据不全而导致ma_x为NaN时，需要读取数据库数据来计算均线
     :return: 增加均线后的df_hist_data
     """
-    collection_code = persistence.database.get_collection(const.STOCK_HIST)
     days_1 = days - 1
-    stock_hist = collection_code.find({'code': df_hist_data['code']}, {'close': 1, '_id': 0}).sort([('date', 1)]).limit(days_1)
+    stock_hist = conn.collection_stock_hist.find({'code': df_hist_data['code']}, {'close': 1, '_id': 0}).sort([('date', 1)]).limit(days_1)
     data_total = DataTotal(stock_hist)
 
     for df_hist_data_each in df_hist_data:
