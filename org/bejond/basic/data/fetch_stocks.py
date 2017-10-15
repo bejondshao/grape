@@ -45,8 +45,6 @@ def save_stock_hist(checks=None):
     :return:
     """
 
-    start = time.time()
-    print(start)
     codes = save_stock_basics(conn.stock_basics)
 
     # persistence.database.drop_collection('stock_hist')
@@ -91,9 +89,6 @@ def save_stock_hist(checks=None):
             conn.collection_stock_hist.insert(json.loads(df_hist_data.to_json(orient='records')))
         i += 1
 
-    end = time.time()
-    print("Time: " + str(end - start))
-
 
 def repair_mas():
     """
@@ -109,5 +104,5 @@ def repair_mas():
         i += 1
 
 
-# repair_mas()
-save_stock_hist()
+repair_mas()
+# save_stock_hist()

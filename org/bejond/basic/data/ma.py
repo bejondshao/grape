@@ -63,7 +63,7 @@ def fetch_previous_data(collection, code, days):
     stock_hist = collection.find({'code': code}, {'close': 1, 'date': 1, '_id': 0}).sort([('date', -1)]).limit(days_1)
 
     df = pandas.DataFrame(list(stock_hist), columns=['close', 'date'])
-    return df[::-1] # reverse所查询的结果，将早的日期放到前面
+    return df[::-1]  # reverse所查询的结果，将早的日期放到前面
 
 
 def fix_mas(days, df_hist_data):

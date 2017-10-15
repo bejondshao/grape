@@ -19,7 +19,7 @@ database = client[config.get('database', 'database_name')]
 stock_basics = config.get('collection', 'stock_basics')
 # 表名
 stock_hist = config.get('collection', 'stock_hist')
-# 表
+# stock_basics表
 collection_stock_basics = database.get_collection(stock_basics)
-# 表
+# stock_hist表
 collection_stock_hist = database.get_collection(stock_hist)
