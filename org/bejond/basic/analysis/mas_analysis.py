@@ -9,6 +9,16 @@ from bejond.basic.util import dateu
 
 
 def find_head_up(code=None, start=None, end=None, pb=None, pe=None, delta=60):
+    """
+    根据ma_60计算趋势，可以将计算结果代码，组合成url直接在某个网站打开。
+    :param code:
+    :param start:
+    :param end:
+    :param pb:
+    :param pe:
+    :param delta:
+    :return:
+    """
     codes = conn.collection_stock_basics.find({'timeToMarket': {'$lt': 20170101}, 'pb': {'$lt': 4}, 'pe': {'$lt': 22, '$gt': 0}}, {'code': 1, '_id': 0})  # codes为Cursor {'code': 'xxxxxx'}
 
     code_date_list = []

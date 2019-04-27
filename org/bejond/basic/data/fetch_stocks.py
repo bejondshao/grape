@@ -84,6 +84,7 @@ def save_stock_hist(checks=None):
             df_hist_data = df_hist_data.reset_index()  # 将date(string)移到列中。
             df_hist_data['code'] = code
 
+            # 自行计算ma_30和ma_60
             df_hist_data = mas(conn.collection_stock_hist, code, const.DAYS_ARRAY, df_hist_data)
 
             conn.collection_stock_hist.insert(json.loads(df_hist_data.to_json(orient='records')))
@@ -105,8 +106,12 @@ def repair_mas():
 
 
 """
-   1. 先执行save_stock_hist() （注释repare_mas()），获取股票历史信息
-   2. 再执行repair_mas()（注释save_stock_hist()），修复ma_30和ma_60的值
+   后来再学学如何创建可以执行的main方法，自行根据数据库和参数判断，执行相关函数即可。
+   对于新数据库
+   1. 执行save_stock_hist()即可（注释repare_mas()）。会自行创建股票列表，获取历史记录，计算ma_30和ma_60。（ma_x可以自行设定，在const.DAYS_ARRAY）
+   对于旧数据库
+   1. 先执行save_stock_hist() （注释repare_mas()），获取股票历史信息。用时3.5小时
+   2. 再执行repair_mas()（注释save_stock_hist()），修复ma_30和ma_60的值。用时
 """
 # save_stock_hist()
 repair_mas()
