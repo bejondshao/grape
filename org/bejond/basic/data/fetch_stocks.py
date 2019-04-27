@@ -104,5 +104,9 @@ def repair_mas():
         i += 1
 
 
-repair_mas()
+"""
+   1. 先执行save_stock_hist() （注释repare_mas()），获取股票历史信息
+   2. 再执行repair_mas()（注释save_stock_hist()），修复ma_30和ma_60的值
+"""
 # save_stock_hist()
+repair_mas()

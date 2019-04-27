@@ -69,6 +69,10 @@ def find_head_up(code=None, start=None, end=None, pb=None, pe=None, delta=60):
 
     return code_date_list
 
+"""
+    执行完fetch_stocks.py的save_stock_hist()和repair_mas()后，执行find_head_up()，查找开启抬头的股票。
+    有个小问题，就是有时候会选出涨到顶峰的股票。
+"""
 
 list1 = find_head_up()
 print(len(list1))
