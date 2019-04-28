@@ -1,9 +1,9 @@
 #!/usr/bin/python3
 # -*- coding: UTF-8 -*-
-import time
-import tushare
 import json
-import bejond.basic.util.timing
+
+import tushare
+
 from bejond.basic import const, conn
 from bejond.basic.data import ma
 from bejond.basic.data.ma import mas
@@ -13,7 +13,7 @@ from bejond.basic.util import dateu
 def save_stock_basics(collection_name):
     """
 
-    :param collection: 存储的collection名
+    :param collection_name: 存储的collection名
     :return:
     """
     df_stock_basics = tushare.get_stock_basics()

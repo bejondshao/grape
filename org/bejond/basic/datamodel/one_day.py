@@ -28,8 +28,8 @@ class OneDay(object):
         else:
             return Slope.UP
 
-    #def get_next_bigger_slope_day(self, days_list):
-        # if self.downing(days_list[0]):
+    # def get_next_bigger_slope_day(self, days_list):
+    # if self.downing(days_list[0]):
 
 
 class Slope(Enum):

@@ -1,10 +1,14 @@
 # !/usr/bin/python
 # -*- coding: UTF-8 -*-
 
-#python3
+# python3
 import atexit
 from time import time
 from datetime import timedelta
+# python3
+import atexit
+from datetime import timedelta
+from time import time
 
 
 def seconds_to_str(t):
@@ -24,7 +28,7 @@ def log(s, elapsed=None):
 
 def end_log():
     end = time()
-    elapsed = end-start
+    elapsed = end - start
     log("End Program", seconds_to_str(elapsed))
 
 

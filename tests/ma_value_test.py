@@ -1,10 +1,8 @@
 #!/usr/bin/python3
 # -*- coding: UTF-8 -*-
-import math
 
 import numpy
 import pandas
-
 
 percent = 0.1
 base1 = 1
@@ -30,13 +28,13 @@ print(df2)
 cal11 = df1.iloc[18]['ma_5'] - df1.iloc[17]['ma_5']
 cal12 = df1.iloc[19]['ma_5'] - df1.iloc[18]['ma_5']
 a = cal12 - cal11
-k1_base = a/df1.iloc[17]['close']
+k1_base = a / df1.iloc[17]['close']
 print(k1_base)
 cal21 = df2.iloc[18]['ma_5'] - df2.iloc[17]['ma_5']
 cal22 = df2.iloc[19]['ma_5'] - df2.iloc[18]['ma_5']
 b = cal22 - cal21
 print(b)
-print(numpy.isclose(a, b/base2))
-k2_base = b/df2.iloc[17]['close']
+print(numpy.isclose(a, b / base2))
+k2_base = b / df2.iloc[17]['close']
 print(k2_base)
 print(k1_base == k2_base)

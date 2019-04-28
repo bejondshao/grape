@@ -2,9 +2,8 @@
 # -*- coding: UTF-8 -*-
 import pandas
 
-from bejond.basic import conn, const
-from bejond.basic.datamodel.one_day import OneDay, Slope
-from bejond.basic.datamodel.two_days import TwoDays
+from bejond.basic import conn
+from bejond.basic.datamodel.one_day import OneDay
 from bejond.basic.util import dateu
 
 
@@ -19,12 +18,14 @@ def find_head_up(code=None, start=None, end=None, pb=None, pe=None, delta=60):
     :param delta:
     :return:
     """
-    codes = conn.collection_stock_basics.find({'timeToMarket': {'$lt': 20170101}, 'pb': {'$lt': 4}, 'pe': {'$lt': 22, '$gt': 0}}, {'code': 1, '_id': 0})  # codes为Cursor {'code': 'xxxxxx'}
+    codes = conn.collection_stock_basics.find(
+        {'timeToMarket': {'$lt': 20170101}, 'pb': {'$lt': 4}, 'pe': {'$lt': 22, '$gt': 0}},
+        {'code': 1, '_id': 0})  # codes为Cursor {'code': 'xxxxxx'}
 
     code_date_list = []
     for code_cursor in codes:  # 分析每只股票
         code = code_cursor['code']
-        #code = '600741'
+        # code = '600741'
         histories = pandas.DataFrame(list(conn.collection_stock_hist.find(
             {'code': code, 'ma_60': {'$gt': 0}}).sort([('date', -1)]).limit(delta)))
         histories = histories[::-1]  # reverse所查询的结果，将早的日期放到前面
@@ -62,7 +63,7 @@ def find_head_up(code=None, start=None, end=None, pb=None, pe=None, delta=60):
             if end is None:
                 end = dateu.get_today()
             if start is None:
-                start = dateu.get_previous_date_str(delta/8)
+                start = dateu.get_previous_date_str(delta / 8)
             day_first = None
             for day in days_list:
                 if day_first is None:
@@ -78,6 +79,7 @@ def find_head_up(code=None, start=None, end=None, pb=None, pe=None, delta=60):
                     day_first = day
 
     return code_date_list
+
 
 """
     执行完fetch_stocks.py的save_stock_hist()和repair_mas()后，执行find_head_up()，查找开启抬头的股票。

@@ -3,9 +3,8 @@
 from collections import deque
 
 import tushare
-import json
-from bejond.basic import const, conn
-from bejond.basic.data import ma
+
+from bejond.basic import conn
 from bejond.basic.util.dateu import date_delta
 
 
@@ -48,7 +47,6 @@ print(df)
 cursor = conn.collection_stock_basics.find_one()
 for key in cursor:
     print(key)
-
 
 # ma.repair_mas(conn.collection_stock_hist, '000800', const.DAYS_ARRAY)
 

@@ -2,10 +2,9 @@
 # -*- coding: UTF-8 -*-
 import pandas
 
-
 df1 = pandas.DataFrame({
-                        'B': ['B0', 'B1', 'B2', 'B3']
-                        })
+    'B': ['B0', 'B1', 'B2', 'B3']
+})
 
 df2 = pandas.DataFrame({'A': ['A4', 'A5', 'A6', 'A7'],
                         'B': ['B4', 'B5', 'B6', 'B7'],
