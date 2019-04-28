@@ -2,6 +2,7 @@
 # -*- coding: UTF-8 -*-
 from bejond.basic import conn, const
 
+
 stock_hist_index = ['code_1_date_-1']
 
 

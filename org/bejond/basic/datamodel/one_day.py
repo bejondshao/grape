@@ -1,8 +1,8 @@
-# !/usr/bin/python
 # -*- coding: UTF-8 -*-
 from enum import Enum
 
-class OneDay:
+
+class OneDay(object):
     def __init__(self, code, date, close, ma_60):
         self.code = code
         self.date = date

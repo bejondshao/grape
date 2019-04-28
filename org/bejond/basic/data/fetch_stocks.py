@@ -1,4 +1,4 @@
-# !/usr/bin/python
+#!/usr/bin/python3
 # -*- coding: UTF-8 -*-
 import time
 import tushare
@@ -113,5 +113,5 @@ def repair_mas():
    1. 先执行save_stock_hist() （注释repare_mas()），获取股票历史信息。用时3.5小时
    2. 再执行repair_mas()（注释save_stock_hist()），修复ma_30和ma_60的值。用时
 """
-# save_stock_hist()
-repair_mas()
+save_stock_hist()
+# repair_mas()

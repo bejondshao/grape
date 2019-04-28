@@ -1,5 +1,5 @@
-# !/usr/bin/python
 # -*- coding: UTF-8 -*-
+
 
 DAYS_ARRAY = [30, 60]
 STOCK_HIST_COLUMNS = ['high', 'v_ma10', 'code', 'ma5', 'ma10', 'price_change', 'v_ma20', 'p_change',

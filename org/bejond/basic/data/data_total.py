@@ -1,9 +1,8 @@
-# !/usr/bin/python
 # -*- coding: UTF-8 -*-
 from collections import deque
 
 
-class DataTotal:
+class DataTotal(object):
 
     def __init__(self, cursor):
         """

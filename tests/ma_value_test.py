@@ -1,9 +1,10 @@
-# !/usr/bin/python
+#!/usr/bin/python3
 # -*- coding: UTF-8 -*-
 import math
 
 import numpy
 import pandas
+
 
 percent = 0.1
 base1 = 1
