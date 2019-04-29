@@ -1,7 +1,8 @@
 #!/usr/bin/python3
+# -*- coding: UTF-8 -*-
 # 大部分.py文件不必以#!作为文件的开始. 根据 PEP-394, 程序的main文件应该以 #!/usr/bin/python2或者 #!/usr/bin/python3开始.
 # #!先用于帮助内核找到Python解释器, 但是在导入模块时, 将会被忽略. 因此只有被直接执行的文件中才有必要加入#!
-# -*- coding: UTF-8 -*-
+
 import contextlib
 import urllib
 
@@ -102,6 +103,7 @@ def append_string(employee_list):
         items.append('<tr><td>%s, %s</td></tr>' % (last_name, first_name))
     items.append('</table>')
     employee_table = ''.join(items)
+    return employee_table
 
 
 def file_or_socket():
@@ -110,13 +112,14 @@ def file_or_socket():
     1. 开启是会占用系统资源
     2. 开启时会阻止其他代码对文件的移动、删除等操作。
     3. 如果只是逻辑上关闭，其他代码仍会无意中对文件进行读写。如果显示关闭则会提前暴露问题，得以尽早解决。
-    # TODO(bejond@163.com): Use a "*" here for string repetition.
     # TODO(Zeke) Change this to use relations.
     :return:
     """
     with open("hello.txt") as hello_file:
         for line in hello_file:
             print(line)
+
+    # TODO(bejond@163.com): Use a "*" here for string repetition.
 
     with contextlib.closing(urllib.urlopen("http://www.python.org/")) as front_page:
         for line in front_page:

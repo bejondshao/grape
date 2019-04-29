@@ -12,7 +12,7 @@ from bejond.basic.util import dateu
 
 def save_stock_basics(collection_name):
     """
-
+    更新股票列表，删除表重新获取并插入。不用更新的方式是因为股票数目和名称会变化，包括股票的其他属性。既然是每条检查，不如重新获取
     :param collection_name: 存储的collection名
     :return:
     """
@@ -40,7 +40,7 @@ def get_last_date(code, collection_code):
 
 def save_stock_hist(checks=None):
     """
-    更新股票历史，建议每日收盘后运行。因为收盘前运行当日数据会有误
+    更新股票历史，建议每日收盘后运行。因为收盘前运行当日数据会有误 TODO, 修改fetch日期，如果今天为交易日并且运行时间在收盘前，则不存储今天的数据
     :param checks: 临时更新某些股票的历史，节省时间。checks=None时更新所有股票历史
     :return:
     """
@@ -103,15 +103,3 @@ def repair_mas():
         print("Repairing mas. Code: " + code)
         ma.repair_mas(conn.collection_stock_hist, code, const.DAYS_ARRAY)
         i += 1
-
-
-"""
-   后来再学学如何创建可以执行的main方法，自行根据数据库和参数判断，执行相关函数即可。
-   对于新数据库
-   1. 执行save_stock_hist()即可（注释repare_mas()）。会自行创建股票列表，获取历史记录，计算ma_30和ma_60。（ma_x可以自行设定，在const.DAYS_ARRAY）
-   对于旧数据库
-   1. 先执行save_stock_hist() （注释repare_mas()），获取股票历史信息。用时3.5小时
-   2. 再执行repair_mas()（注释save_stock_hist()），修复ma_30和ma_60的值。用时
-"""
-save_stock_hist()
-# repair_mas()
