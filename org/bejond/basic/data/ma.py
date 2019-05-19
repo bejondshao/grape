@@ -82,7 +82,7 @@ def fix_mas(days, df_hist_data):
             ma = data_total.total / days
 
 
-def repair_mas(collection, code, days_array):
+def repair_mas(collection, code, days_array, repair_days=0):
     """
 
     :param collection: 历史数据库

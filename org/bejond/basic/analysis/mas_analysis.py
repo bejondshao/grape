@@ -61,7 +61,7 @@ def find_head_up(code=None, start=None, end=None, pb=None, pe=None, delta=60):
 
         if len(days_list) > 0:  # 根据斜率变化，判断股票走势
             if end is None:
-                end = dateu.get_today()
+                end = dateu.get_today_str()
             if start is None:
                 start = dateu.get_previous_date_str(delta / 8)
             day_first = None

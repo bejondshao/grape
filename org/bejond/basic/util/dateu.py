@@ -10,13 +10,49 @@ from bejond.basic import const
 date_format = '%Y-%m-%d'
 
 
-def get_today():
+def now():
+    """
+    获取当前时间。例如：2019-05-19 17:56:18.575693
+    :return:
+    """
+    return datetime.datetime.now()
+
+
+def get_today_str():
+    """
+    获取今天日期字符串，不包括时间，返回日期字符串，例如2019-05-19
+    :return:
+    """
     return time.strftime(date_format)
+
+def get_today():
+    """
+    获取今天日期，不包括时间，返回日期，例如2019-05-19 00:00:00
+    :return:
+    """
+    return datetime.datetime.strptime(get_today_str(), date_format)
+
+
+def get_today_time(hours=0):
+    """
+    备用方法
+    获取今天的某个小时的时间，24小时。例如2019-05-19 13:00:00
+    :param hours:
+    :return:
+    """
+    return get_today() + datetime.timedelta(hours=hours)
+
+
+def get_close_time():
+    """
+    获取今天收盘时间，就是今天的下午3点。有可能今天并非交易日，但不影响返回。例如2019-05-19 15:00:00
+    :return:
+    """
+    return get_today_time(15)
 
 
 def get_previous_date_str(delta):
-    now = datetime.datetime.now()
-    previous = now + datetime.timedelta(days=-delta)
+    previous = now() + datetime.timedelta(days=-delta)
     return previous.strftime(date_format)
 
 

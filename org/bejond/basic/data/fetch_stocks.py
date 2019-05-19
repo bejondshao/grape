@@ -23,7 +23,7 @@ def save_stock_basics(collection_name):
     conn.database.drop_collection(collection_name)
     stock_basics = conn.database[collection_name]
 
-    stock_basics.insert(json.loads(df_stock_basics.to_json(orient='records')))
+    stock_basics.insert_one(json.loads(df_stock_basics.to_json(orient='records')))
     return df_stock_basics['code']
 
 
@@ -38,10 +38,20 @@ def get_last_date(code, collection_code):
     return None
 
 
-def save_stock_hist(checks=None):
+def is_before_close_time():
+    """
+    根据当前时间和当天15点收盘时间比较，如果时间在15点之前，则返回True
+    :return:
+    """
+    close_time = dateu.get_close_time()
+    return dateu.now() < close_time
+
+def save_stock_hist(checks=None, repair_days=0):
     """
     更新股票历史，建议每日收盘后运行。因为收盘前运行当日数据会有误 TODO, 修改fetch日期，如果今天为交易日并且运行时间在收盘前，则不存储今天的数据
     :param checks: 临时更新某些股票的历史，节省时间。checks=None时更新所有股票历史
+    :param repair_days 要修复的天数，默认是0。因为有时候会错误的在交易期间更新数据，而当天所有股票的最高价，最低价，收盘价有可能
+    都是错误的，这回影响其他参数的计算。因此需要修复，填入一个数值，会删掉库里的最后n天记录，然后重新获取。
     :return:
     """
 
@@ -52,6 +62,12 @@ def save_stock_hist(checks=None):
     i = 1
     if checks is not None:
         codes = checks
+
+    # calculate end out of for loop to save time
+    end = None
+    if is_before_close_time():
+        end = dateu.get_previous_date_str(1)
+
     for code in codes:
         last_date = None
         # persistence.database.drop_collection(code)
@@ -66,11 +82,11 @@ def save_stock_hist(checks=None):
         print('last_date ' + str(last_date))
 
         if last_date is None: # 如果数据库未找到上一次存储的日期，说明是新股票
-            df_hist_data = tushare.get_hist_data(code)
+            df_hist_data = tushare.get_hist_data(code, end=end)
         else: # 如果找到上次存储的日期
             # next_trade_date = dateu.get_next_trade_date(last_date) # 获取下个交易日，is_holiday读取csv速度太慢，放弃
             # if next_trade_date < datetime.now():
-            df_hist_data = tushare.get_hist_data(code, dateu.get_next_date_str(last_date))
+            df_hist_data = tushare.get_hist_data(code, start=dateu.get_next_date_str(last_date), end=end)
         if df_hist_data is not None and len(df_hist_data.index) > 0:
             df_hist_data = df_hist_data.iloc[::-1] # get_hist_data的返回结果是降序的，reverse
             print(df_hist_data.index)
@@ -87,7 +103,7 @@ def save_stock_hist(checks=None):
             # 自行计算ma_30和ma_60
             df_hist_data = mas(conn.collection_stock_hist, code, const.DAYS_ARRAY, df_hist_data)
 
-            conn.collection_stock_hist.insert(json.loads(df_hist_data.to_json(orient='records')))
+            conn.collection_stock_hist.insert_one(json.loads(df_hist_data.to_json(orient='records')))
         i += 1
 
 
