@@ -23,7 +23,7 @@ def save_stock_basics(collection_name):
     conn.database.drop_collection(collection_name)
     stock_basics = conn.database[collection_name]
 
-    stock_basics.insert_one(json.loads(df_stock_basics.to_json(orient='records')))
+    stock_basics.insert_many(json.loads(df_stock_basics.to_json(orient='records')))
     return df_stock_basics['code']
 
 
@@ -103,7 +103,7 @@ def save_stock_hist(checks=None, repair_days=0):
             # 自行计算ma_30和ma_60
             df_hist_data = mas(conn.collection_stock_hist, code, const.DAYS_ARRAY, df_hist_data)
 
-            conn.collection_stock_hist.insert_one(json.loads(df_hist_data.to_json(orient='records')))
+            conn.collection_stock_hist.insert_many(json.loads(df_hist_data.to_json(orient='records')))
         i += 1
 
 
