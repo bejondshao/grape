@@ -14,6 +14,3 @@ def create_indexes():
     # if stock_hist_index[1] not in indexes:
     #     collection_code.create_index([('code', 1)], name = stock_hist_index[1])
     #     print 'created new index: ' + stock_hist_index[1]
-
-
-create_indexes()
