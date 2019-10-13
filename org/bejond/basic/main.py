@@ -5,6 +5,7 @@ from bejond.basic.analysis import mas_analysis
 from bejond.basic.conn import database
 from bejond.basic.data import fetch_stocks
 
+# TODO 增加多个指标，根据不同自权重计算总权重，排序，而非像现在的通过或不通过
 # TODO 开发修复某日数据的功能
 
 def main():
