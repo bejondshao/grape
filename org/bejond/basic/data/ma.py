@@ -2,6 +2,7 @@
 from __future__ import division
 
 from bejond.basic.data.data_total import DataTotal
+from bejond.basic.util import dateu
 from org.bejond.basic import conn
 from bejond.basic import const
 from collections import deque
@@ -116,3 +117,28 @@ def repair_mas(collection, code, days_array, repair_days=0):
                     }
             }
         )
+
+
+def get_recent_max(code):
+    """
+    根据code获取最近13个月的最大值
+    :return:
+    """
+    high_cursor = conn.collection_stock_hist.find({"code": code, "date": {'$gt': dateu.get_previous_date_str(400)}},
+                                             {"high": 1, "_id": 0}).sort([("high", -1)]).limit(1)
+    high = 0.0
+    if high_cursor is not None:
+        high = high_cursor[0]['high'] # 因为high_cursor是一个完整的cursor，需要获取第一个节点的内容
+    return high
+
+def get_recent_min(code):
+    """
+    根据code获取最近13个月的最小值
+    :return:
+    """
+    low_cursor = conn.collection_stock_hist.find({"code": code, "date": {'$gt': dateu.get_previous_date_str(400)}},
+                                             {"low": 1, "_id": 0}).sort([("low", 1)]).limit(1)
+    low = 0.0
+    if low_cursor is not None:
+        low = low_cursor[0]['low']
+    return low

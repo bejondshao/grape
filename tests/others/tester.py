@@ -40,14 +40,26 @@ print(val)
 a = 1.0
 a = a + 6 - 3
 print(a)
+tushare.set_token('613539b4845cb7f8d0c5ef32bde871095130009e2244da8190257326')
+pro = tushare.pro_api()
 
-df = tushare.get_k_data(code='000800', start='2017-10-01', end='2017-11-11')
+df_pro = pro.daily(ts_code='600466.SH', start_date='20181019') # tuahre pro
+print(df_pro)
+df_pro_bar = tushare.pro_bar(ts_code='600466.SH', adj='qfq', start_date='20181019')
+print(df_pro_bar)
+
+df = tushare.get_k_data(code='600466', start='2018-10-19')
 print(df)
 
 cursor = conn.collection_stock_basics.find_one()
+print(cursor['name'])
 for key in cursor:
     print(key)
 
 # ma.repair_mas(conn.collection_stock_hist, '000800', const.DAYS_ARRAY)
 
 print(date_delta('2017-01-02', '2017-01-04'))
+
+print(60 / 8)
+print(int(60 / 8))
+print(2.9 / 7)

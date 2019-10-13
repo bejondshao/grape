@@ -13,7 +13,7 @@ def main():
     if len(database.collection_names()) > 0:
         fetch_stocks.repair_mas()
 
-    mas_analysis.find_head_up()
+    mas_analysis.find_head_up(filter_time=1.2)
 
 if __name__ == '__main__':
     main()
