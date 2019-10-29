@@ -48,13 +48,16 @@ print(df_pro)
 df_pro_bar = tushare.pro_bar(ts_code='600466.SH', adj='qfq', start_date='20181019')
 print(df_pro_bar)
 
-df = tushare.get_k_data(code='600466', start='2018-10-19')
+df = tushare.get_hist_data(code='600466', start='2018-10-19')
+print(df)
 print(df)
 
 cursor = conn.collection_stock_basics.find_one()
 print(cursor['name'])
 for key in cursor:
     print(key)
+
+
 
 # ma.repair_mas(conn.collection_stock_hist, '000800', const.DAYS_ARRAY)
 

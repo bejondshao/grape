@@ -86,7 +86,14 @@ def save_stock_hist(checks=None, repair_days=0):
         else: # 如果找到上次存储的日期
             # next_trade_date = dateu.get_next_trade_date(last_date) # 获取下个交易日，is_holiday读取csv速度太慢，放弃
             # if next_trade_date < datetime.now():
-            df_hist_data = tushare.get_hist_data(code, start=dateu.get_next_date_str(last_date), end=end)
+            repeat = True
+            while repeat:
+                try:
+                    df_hist_data = tushare.get_hist_data(code, start=dateu.get_next_date_str(last_date), end=end)
+                    repeat = False
+                except Exception as e:
+                    continue
+
         if df_hist_data is not None and len(df_hist_data.index) > 0:
             df_hist_data = df_hist_data.iloc[::-1] # get_hist_data的返回结果是降序的，reverse
             print(df_hist_data.index)

@@ -19,7 +19,7 @@ def find_head_up(code=None, start=None, end=None, pb=None, pe=None, delta=60, fi
     :param delta:
     :return:
     """
-    print("find_head_up()")
+    print("find_head_up(filter_time=" + str(filter_time) + ")")
     # previous = dateu.get_previous_date_str(100) # 查找100天前上市的
     codes = conn.collection_stock_basics.find(
         {'timeToMarket': {'$lt': 20170101}, 'pb': {'$lt': 4}, 'pe': {'$lt': 22, '$gt': 0}}, # 'timeToMarket': {'$lt': 20170101}, 暂时不过滤上市时间
@@ -94,4 +94,4 @@ def find_head_up(code=None, start=None, end=None, pb=None, pe=None, delta=60, fi
     有个小问题，就是有时候会选出涨到顶峰的股票。
 """
 # 测试，不需要。否则执行main()时会先执行该语句
-#list1 = find_head_up(filter_time=1.2)
+#list1 = find_head_up(filter_time=1.25)
