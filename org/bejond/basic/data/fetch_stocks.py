@@ -121,8 +121,21 @@ def repair_mas():
     """
     codes = save_stock_basics(conn.stock_basics)
     i = 1
+    collection = conn.collection_stock_hist
     for code in codes:
         print(i)
         print("Repairing mas. Code: " + code)
-        ma.repair_mas(conn.collection_stock_hist, code, const.DAYS_ARRAY)
+        ma.repair_mas(collection, code, const.DAYS_ARRAY)
         i += 1
+
+def repair_turnover():
+    """
+    turnover，换手率，接口文档tushare.get_hist_data()提示是有返回，但是并没有，因此需要自己计算，计算规则是：当日成交量(手) * 100 / (流通股(亿股) * 100000000) * 100%。即 volumn / outstanding / 1000000
+    :return: turnover
+    """
+    codes = save_stock_basics(conn.stock_basics)
+    i = 1
+    collection = conn.collection_stock_hist
+    for code in codes:
+        print(i)
+

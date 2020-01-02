@@ -19,6 +19,10 @@ def find_head_up(code=None, start=None, end=None, pb=None, pe=None, delta=60, fi
     :param delta:
     :return:
     """
+    print('\n')
+    if end is None:
+        end = dateu.get_today_str()
+    print(end)
     print("find_head_up(filter_time=" + str(filter_time) + ")")
     # previous = dateu.get_previous_date_str(100) # 查找100天前上市的
     codes = conn.collection_stock_basics.find(
@@ -63,8 +67,6 @@ def find_head_up(code=None, start=None, end=None, pb=None, pe=None, delta=60, fi
         #     first = second
 
         if len(days_list) > 0:  # 根据斜率变化，判断股票走势
-            if end is None:
-                end = dateu.get_today_str()
             if start is None:
                 start = dateu.get_previous_date_str(int(delta / 8)) # 这里int(delta / 8)只是计算观察区间，8是随意取的值，int(60 / 8) = 7，也就是前7天
             day_first = None
@@ -76,7 +78,7 @@ def find_head_up(code=None, start=None, end=None, pb=None, pe=None, delta=60, fi
                     max = ma.get_recent_max(code) # 对符合ma的值向前一年内所处位置进行筛选，最高点要低于当前值的1.5倍，最低点的1.5倍要高于当前值
                     min = ma.get_recent_min(code)
                     if max / filter_time <= day.close <= min * filter_time:
-                        print(code + " " + code_cursor['name'] + " " + code_cursor['industry'] + " " + code_cursor['area'] + ": " + day.date)
+                        print(code + ' ' + code_cursor['name'] + ' ' + code_cursor['industry'] + ' ' + code_cursor['area'] + ': ' + day.date + ' 收盘价: ' + str(day.close))
                         code_date_list.append(day)
                         break
                 # elif day_first.slope > 0:
@@ -85,6 +87,8 @@ def find_head_up(code=None, start=None, end=None, pb=None, pe=None, delta=60, fi
                     day_first = day
 
     print(len(code_date_list))
+    print('')
+    print('----------------------------------------------------------------------------')
 
     return code_date_list
 
@@ -94,4 +98,4 @@ def find_head_up(code=None, start=None, end=None, pb=None, pe=None, delta=60, fi
     有个小问题，就是有时候会选出涨到顶峰的股票。
 """
 # 测试，不需要。否则执行main()时会先执行该语句
-#list1 = find_head_up(filter_time=1.25)
+# list1 = find_head_up(filter_time=1.3)

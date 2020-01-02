@@ -22,3 +22,6 @@ stock_hist = config.get('collection', 'stock_hist')
 collection_stock_basics = database.get_collection(stock_basics)
 # stock_hist表
 collection_stock_hist = database.get_collection(stock_hist)
+
+# hexo post路径
+hexo_path = config.get('hexo', 'hexo_hexo_post_path')

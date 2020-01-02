@@ -8,6 +8,7 @@ import tushare.util.dateu as dateu
 from bejond.basic import const
 
 date_format = '%Y-%m-%d'
+datetime_format = '%Y-%m-%d %H:%M:%S'
 
 
 def now():
@@ -36,11 +37,19 @@ def get_today():
 def get_today_time(hours=0):
     """
     备用方法
-    获取今天的某个小时的时间，24小时。例如2019-05-19 13:00:00
+    获取今天的某个小时的时间，不包含分钟和秒，24小时。例如2019-05-19 13:00:00
     :param hours:
     :return:
     """
     return get_today() + datetime.timedelta(hours=hours)
+
+
+def get_now_time():
+    """
+    返回此刻的时间，包含时分秒，格式为2019-05-19 13:20:10
+    :return:
+    """
+    return now().strftime(datetime_format)
 
 
 def get_close_time():
@@ -131,3 +140,8 @@ def date_delta(date_str1, date_str2):
     date1 = datetime.datetime.strptime(date_str1, date_format)
     date2 = datetime.datetime.strptime(date_str2, date_format)
     return (date2 - date1).days
+
+
+def get_year():
+    return now().year
+
