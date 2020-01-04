@@ -1,13 +1,14 @@
 #!/usr/bin/python3
 # -*- coding: UTF-8 -*-
 import os
+import webbrowser
 from pathlib import Path
 
 from bejond.basic.conn import hexo_path
 from bejond.basic.const import HEXO_POST_HEAD, HEXO_POST_TITLE
 from bejond.basic.datamodel.stock_url import StockUrl
 from bejond.basic.util import dateu, md_util
-from bejond.basic.util.md_util import to_url_open
+from bejond.basic.util.md_util import to_url
 from bejond.basic.util.static_string import FILE_MD
 
 
@@ -41,9 +42,15 @@ def write_head_up_to_post(list, new_table=False):
             if new_table:
                 print("Creating new table")
                 file.write(new_head)
+            stock_list = []
             for cls in list:
                 stock = StockUrl(cls.code)
-                to_url_open(stock, cls)
+                stock_list.append(stock)
+                to_url(stock, cls)
                 row = md_util.to_table_row(cls)
                 print(row)
                 file.write(row)
+            if len(stock_list) < 9:
+                for stock_url in stock_list:
+                    webbrowser.open(stock_url.xueqiu_url)
+                    webbrowser.open(stock_url.lixinger_url)

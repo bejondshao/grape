@@ -1,6 +1,5 @@
 # !/usr/bin/python
 # -*- coding: UTF-8 -*-
-import webbrowser
 
 from bejond.basic.const import MD_URL
 from bejond.basic.util.static_string import SPAN, NECK, NEWLINE
@@ -31,15 +30,15 @@ def to_table_row(cls):
     return to_string
 
 
-def to_url_open(stock_url, filtered_stock):
+def to_url(stock_url, filtered_stock):
     """
-    将代码转为
+    code转为markdown格式的雪球url
+    name转为markdown格式的理性人url
     :param cls: StockUrl对象
-    :return: 转为markdown格式的雪球url
+    :return:
     """
-    webbrowser.open(stock_url.xueqiu_url)
-    webbrowser.open(stock_url.lixinger_url)
     url = MD_URL.format(code=stock_url.code, url=stock_url.xueqiu_url)
+    l_url = MD_URL.format(code=stock_url.code, url=stock_url.lixinger_url)
     # 将过滤的股票的code转为url形式，输出到文件中
     filtered_stock.code = url
-    return url
+    filtered_stock.name = l_url
