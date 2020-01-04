@@ -7,7 +7,7 @@ STOCK_HIST_COLUMNS = ['high', 'v_ma10', 'code', 'ma5', 'ma10', 'price_change', '
 '''
     pandas.itertuples()方法在遍历DataFrame为一个个Pandas对象时，不允许使用下划线开头的列名，因此用id代替
 '''
-STOCK_HIST_SIMPLE_COLUMNS = ['_id', 'code', 'date', 'close']
+STOCK_HIST_SIMPLE_COLUMNS = ['_id', 'code', 'date', 'close', 'ma_60']
 PANDAS_DATA_FRAME_ID = 'id'
 STOCK_HIST_MONGO_ID = '_id'
 
@@ -38,3 +38,4 @@ comments: false
 [grape](https://github.com/bejondshao/grape)本地运行的结果。
 **声明：grape选股策略在不断调整和丰富，股票列表仅记录用，不作为任何投资建议。依据列表选股投资导致亏损本人概不负责。**
 """
+MD_URL = '[{code}]({url})'

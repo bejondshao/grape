@@ -96,10 +96,13 @@ def repair_mas(collection, code, days_array, repair_days=0):
         {'_id': 1,
          'code': 1,
          'date': 1,
-         'close': 1}
+         'close': 1,
+         'ma_60': 1}
     ).sort([('date', 1)])
-
     df = pandas.DataFrame(list(stock_hist), columns=const.STOCK_HIST_SIMPLE_COLUMNS)
+    if df.empty or pandas.notnull(df.values[-1][4]): # 如果日期最大的记录的ma_60存在，说明计算过，则不进行修复mas
+        return
+    print("Repairing mas. Code: " + code)
     df.rename(columns={const.STOCK_HIST_MONGO_ID: const.PANDAS_DATA_FRAME_ID}, inplace=True)  # 重命名列_id改为id
     for days in days_array:
         df['ma_' + str(days)] = pandas.Series(df['close']).rolling(window=days).mean()

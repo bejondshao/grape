@@ -18,10 +18,18 @@ database = client[config.get('database', 'database_name')]
 stock_basics = config.get('collection', 'stock_basics')
 # 表名
 stock_hist = config.get('collection', 'stock_hist')
+# stock_ma_head_up表名
+stock_ma_head_up = config.get('collection', 'stock_ma_head_up')
 # stock_basics表
 collection_stock_basics = database.get_collection(stock_basics)
 # stock_hist表
 collection_stock_hist = database.get_collection(stock_hist)
+# stock_ma_head_up表
+collection_stock_ma_head_up = database.get_collection(stock_ma_head_up)
 
 # hexo post路径
 hexo_path = config.get('hexo', 'hexo_hexo_post_path')
+
+# stock
+lixinger_url = config.get('stock', 'lixinger_url')
+xueqiu_url = config.get('stock', 'xueqiu_url')

@@ -3,8 +3,11 @@
 import pandas
 
 from bejond.basic import conn
+from bejond.basic.conn import collection_stock_ma_head_up
 from bejond.basic.data import ma
+from bejond.basic.datamodel.code_ma_head_up import CodeMaHeadUp
 from bejond.basic.datamodel.one_day import OneDay
+from bejond.basic.output.write_file import write_head_up_to_post
 from bejond.basic.util import dateu
 
 
@@ -79,15 +82,20 @@ def find_head_up(code=None, start=None, end=None, pb=None, pe=None, delta=60, fi
                     min = ma.get_recent_min(code)
                     if max / filter_time <= day.close <= min * filter_time:
                         print(code + ' ' + code_cursor['name'] + ' ' + code_cursor['industry'] + ' ' + code_cursor['area'] + ': ' + day.date + ' 收盘价: ' + str(day.close))
-                        code_date_list.append(day)
-                        break
+                        fetched_stock = collection_stock_ma_head_up.find_one({'code':code, 'date': {'$gt' : start}}) # date在这里是str，所以后面的日期比前面的日期大
+                        if fetched_stock is None:
+                            stock_filtered = CodeMaHeadUp(code, name=code_cursor['name'], date=day.date, industry=code_cursor['industry'], area=code_cursor['area'], close=str(day.close))
+                            print("inserting: {0}, {1}".format(stock_filtered.code, stock_filtered.date))
+                            collection_stock_ma_head_up.insert_one(stock_filtered.__dict__)
+                            code_date_list.append(stock_filtered)
+                            break
                 # elif day_first.slope > 0:
                 #     break
                 else:
                     day_first = day
 
     print(len(code_date_list))
-    print('')
+    write_head_up_to_post(code_date_list)
     print('----------------------------------------------------------------------------')
 
     return code_date_list
@@ -97,5 +105,3 @@ def find_head_up(code=None, start=None, end=None, pb=None, pe=None, delta=60, fi
     执行完fetch_stocks.py的save_stock_hist()和repair_mas()后，执行find_head_up()，查找开启抬头的股票。
     有个小问题，就是有时候会选出涨到顶峰的股票。
 """
-# 测试，不需要。否则执行main()时会先执行该语句
-# list1 = find_head_up(filter_time=1.3)

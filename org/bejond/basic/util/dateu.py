@@ -61,6 +61,11 @@ def get_close_time():
 
 
 def get_previous_date_str(delta):
+    """
+    获取上一个日期
+    :param delta:
+    :return:
+    """
     previous = now() + datetime.timedelta(days=-delta)
     return previous.strftime(date_format)
 

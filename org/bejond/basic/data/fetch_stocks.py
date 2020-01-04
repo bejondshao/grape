@@ -46,6 +46,7 @@ def is_before_close_time():
     close_time = dateu.get_close_time()
     return dateu.now() < close_time
 
+
 def save_stock_hist(checks=None, repair_days=0):
     """
     更新股票历史，建议每日收盘后运行。因为收盘前运行当日数据会有误 TODO, 修改fetch日期，如果今天为交易日并且运行时间在收盘前，则不存储今天的数据
@@ -67,25 +68,28 @@ def save_stock_hist(checks=None, repair_days=0):
     end = None
     if is_before_close_time():
         end = dateu.get_previous_date_str(1)
-
+    today_str = dateu.get_today_str()
     for code in codes:
         last_date = None
         # persistence.database.drop_collection(code)
-        #if collection_code is not None:
+        # if collection_code is not None:
         # last_result = collection_code.find({}).sort('date', -1).limit(1)
         #    last_result = collection_code.find({}).sort({'date': -1}).limit(1)
 
-        #df_hist_data = None
-        print(i)
-        print(code)
+        # df_hist_data = None
         last_date = get_last_date(code, conn.collection_stock_hist)
-        print('last_date ' + str(last_date))
 
-        if last_date is None: # 如果数据库未找到上一次存储的日期，说明是新股票
+        if last_date is None:  # 如果数据库未找到上一次存储的日期，说明是新股票
             df_hist_data = tushare.get_hist_data(code, end=end)
-        else: # 如果找到上次存储的日期
+        elif last_date.__eq__(today_str):  # 如果last_date和最近一个交易日（如果今天此时时间不到收盘时间，则是上一个交易日。如果时间是收盘时间后，则是今天）一样，说明获取过，就跳过
+            # elif last_date.__eq__(dateu.get_previous_date_str(1)): # 这一行是周六测试用，忽略
+            continue
+        else:  # 如果找到上次存储的日期且日期不是最近的交易日
             # next_trade_date = dateu.get_next_trade_date(last_date) # 获取下个交易日，is_holiday读取csv速度太慢，放弃
             # if next_trade_date < datetime.now():
+            print(i)
+            print(code)
+            print('last_date ' + str(last_date))
             repeat = True
             while repeat:
                 try:
@@ -95,7 +99,7 @@ def save_stock_hist(checks=None, repair_days=0):
                     continue
 
         if df_hist_data is not None and len(df_hist_data.index) > 0:
-            df_hist_data = df_hist_data.iloc[::-1] # get_hist_data的返回结果是降序的，reverse
+            df_hist_data = df_hist_data.iloc[::-1]  # get_hist_data的返回结果是降序的，reverse
             print(df_hist_data.index)
 
             '''
@@ -123,10 +127,9 @@ def repair_mas():
     i = 1
     collection = conn.collection_stock_hist
     for code in codes:
-        print(i)
-        print("Repairing mas. Code: " + code)
         ma.repair_mas(collection, code, const.DAYS_ARRAY)
         i += 1
+
 
 def repair_turnover():
     """
@@ -138,4 +141,3 @@ def repair_turnover():
     collection = conn.collection_stock_hist
     for code in codes:
         print(i)
-
