@@ -64,11 +64,12 @@ def save_stock_hist(checks=None, repair_days=0):
     if checks is not None:
         codes = checks
 
-    # calculate end out of for loop to save time
+    # calculate end out of for loop to save time. end is date
     end = None
     if is_before_close_time():
-        end = dateu.get_previous_date_str(1)
-    today_str = dateu.get_today_str()
+        end = dateu.get_previous_date()
+    # 这里需要传end，如果是在交易日日中执行获取数据，则获取日期截止到前一个交易日，作为最新的交易日
+    latest_trade_date_str = dateu.get_latest_trade_date_str(end)
     for code in codes:
         last_date = None
         # persistence.database.drop_collection(code)
@@ -77,11 +78,12 @@ def save_stock_hist(checks=None, repair_days=0):
         #    last_result = collection_code.find({}).sort({'date': -1}).limit(1)
 
         # df_hist_data = None
+        # 上一次获取数据的最后交易日期
         last_date = get_last_date(code, conn.collection_stock_hist)
 
         if last_date is None:  # 如果数据库未找到上一次存储的日期，说明是新股票
-            df_hist_data = tushare.get_hist_data(code, end=end)
-        elif last_date.__eq__(today_str):  # 如果last_date和最近一个交易日（如果今天此时时间不到收盘时间，则是上一个交易日。如果时间是收盘时间后，则是今天）一样，说明获取过，就跳过
+            df_hist_data = tushare.get_hist_data(code, end=dateu.to_str(end))
+        elif last_date.__eq__(latest_trade_date_str):  # 如果last_date和最新交易日（如果今天此时时间不到收盘时间，则是上一个交易日。如果时间是收盘时间后，则是今天）一样，说明获取过，就跳过
             # elif last_date.__eq__(dateu.get_previous_date_str(1)): # 这一行是周六测试用，忽略
             continue
         else:  # 如果找到上次存储的日期且日期不是最近的交易日

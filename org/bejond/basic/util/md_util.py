@@ -37,8 +37,8 @@ def to_url(stock_url, filtered_stock):
     :param cls: StockUrl对象
     :return:
     """
-    code_xueqiu_url = MD_URL.format(code=stock_url.code, url=stock_url.xueqiu_url)
-    name_lixinger_url = MD_URL.format(code=stock_url.name, url=stock_url.lixinger_url)
+    code_xueqiu_url = MD_URL.format(code=filtered_stock.code, url=stock_url.xueqiu_url)
+    name_lixinger_url = MD_URL.format(code=filtered_stock.name, url=stock_url.lixinger_url)
     # 将过滤的股票的code转为url形式，输出到文件中
     filtered_stock.code = code_xueqiu_url
     filtered_stock.name = name_lixinger_url
