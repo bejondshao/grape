@@ -26,7 +26,9 @@ def to_str(date_, format=date_format):
     :param format:
     :return:
     """
-    return date_.strftime(format)
+    if date_ is None:
+        return None
+    return date_.strftime(format);
 
 
 def get_today_str():

@@ -102,7 +102,7 @@ def save_stock_hist(checks=None, repair_days=0):
 
         if df_hist_data is not None and len(df_hist_data.index) > 0:
             df_hist_data = df_hist_data.iloc[::-1]  # get_hist_data的返回结果是降序的，reverse
-            print(df_hist_data.index)
+            # print(df_hist_data.index)
 
             '''
             注意：如果调用tushare.get_k_data，index是自增数字，date是一列。

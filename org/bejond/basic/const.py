@@ -33,7 +33,7 @@ tags:
   - 股票
 categories:
   - 股票
-  - {a}
+  - 选股
 date: {b}
 comments: false
 

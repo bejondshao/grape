@@ -25,7 +25,8 @@ class StockUrl(object):
             self.market = SZ
             self.market_stock_code = self.market + self.code
             if self.code.startswith(O):
-                self.no_zero_code = self.code[2:5]
+                no_zero_int = int(self.code)
+                self.no_zero_code = str(no_zero_int)
 
     def __deal_lixinger_url(self):
         """
@@ -50,3 +51,6 @@ class StockUrl(object):
         self.__deal_market()
         self.__deal_lixinger_url()
         self.__deal_xueqiu_url()
+
+    def __repr__(self):
+        return str(self.__dict__)
