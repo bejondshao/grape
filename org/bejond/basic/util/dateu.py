@@ -8,6 +8,7 @@ import tushare.util.dateu as dateu
 from bejond.basic import const
 
 date_format = '%Y-%m-%d'
+date_format_tight = '%Y%m%d'
 datetime_format = '%Y-%m-%d %H:%M:%S'
 
 
@@ -31,12 +32,12 @@ def to_str(date_, format=date_format):
     return date_.strftime(format);
 
 
-def get_today_str():
+def get_today_str(format=date_format):
     """
     获取今天日期字符串，不包括时间，返回日期字符串，例如2019-05-19
     :return:
     """
-    return time.strftime(date_format)
+    return time.strftime(format)
 
 
 def get_today():
@@ -46,6 +47,10 @@ def get_today():
     """
     return datetime.datetime.strptime(get_today_str(), date_format)
 
+
+def get_today_int():
+    date = get_today_str(date_format_tight)
+    return int(date)
 
 def get_today_time(hours=0):
     """

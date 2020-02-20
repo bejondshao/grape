@@ -45,4 +45,4 @@ stock_hist
 - v_ma5: 5日均量
 - v_ma10: 10日均量
 - v_ma20: 20日均量
-- turnover: 换手率[注：指数无此项]
+- turnover: 换手率[注：指数无此项](实际上tushare.org接口未返回换手率)

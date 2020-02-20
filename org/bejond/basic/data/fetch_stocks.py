@@ -95,7 +95,7 @@ def save_stock_hist(checks=None, repair_days=0):
             repeat = True
             while repeat:
                 try:
-                    df_hist_data = tushare.get_hist_data(code, start=dateu.get_next_date_str(last_date), end=end)
+                    df_hist_data = tushare.get_hist_data(code, start=dateu.get_next_date_str(last_date), end=dateu.to_str(end))
                     repeat = False
                 except Exception as e:
                     continue

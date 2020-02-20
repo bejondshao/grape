@@ -127,7 +127,7 @@ def get_recent_max(code):
     根据code获取最近13个月的最大值
     :return:
     """
-    high_cursor = conn.collection_stock_hist.find({"code": code, "date": {'$gt': dateu.get_previous_date_str(400)}},
+    high_cursor = conn.collection_stock_hist.find({"code": code, "date": {'$gt': dateu.get_previous_date_str(300)}},
                                              {"high": 1, "_id": 0}).sort([("high", -1)]).limit(1)
     high = 0.0
     if high_cursor is not None:
@@ -139,7 +139,7 @@ def get_recent_min(code):
     根据code获取最近13个月的最小值
     :return:
     """
-    low_cursor = conn.collection_stock_hist.find({"code": code, "date": {'$gt': dateu.get_previous_date_str(400)}},
+    low_cursor = conn.collection_stock_hist.find({"code": code, "date": {'$gt': dateu.get_previous_date_str(300)}},
                                              {"low": 1, "_id": 0}).sort([("low", 1)]).limit(1)
     low = 0.0
     if low_cursor is not None:

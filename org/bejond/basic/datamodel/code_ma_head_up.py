@@ -3,13 +3,14 @@ from bejond.basic.util.static_string import SPAN
 
 
 class CodeMaHeadUp(object):
-    def __init__(self, code, name, date, industry, area, close):
+    def __init__(self, code, name, date, industry, area, close, today):
         self.code = code
         self.name = name
         self.date = date
         self.industry = industry
         self.area = area
         self.close = close
+        self.insert_date = today
 
     def attributes(self):
         return ['code', 'name', 'date', 'industry', 'area', 'close']
