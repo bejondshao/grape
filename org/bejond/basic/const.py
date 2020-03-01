@@ -42,4 +42,4 @@ comments: false
 [grape](https://github.com/bejondshao/grape)本地运行的结果。
 **声明：grape选股策略在不断调整和丰富，股票列表仅记录用，不作为任何投资建议。依据列表选股投资导致亏损本人概不负责。**
 """
-MD_URL = '[{code}]({url})'
+MD_URL = '[{column}]({url})'

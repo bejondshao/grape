@@ -33,3 +33,4 @@ hexo_path = config.get('hexo', 'hexo_hexo_post_path')
 # stock
 lixinger_url = config.get('stock', 'lixinger_url')
 xueqiu_url = config.get('stock', 'xueqiu_url')
+eastmoney_url = config.get('stock', 'eastmoney_url')

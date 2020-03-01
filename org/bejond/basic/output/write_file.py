@@ -52,5 +52,6 @@ def write_head_up_to_post(list, new_table=False):
                 file.write(row)
             if len(stock_list) < 9:
                 for stock_url in stock_list:
-                    webbrowser.open(stock_url.xueqiu_url)
+                    # webbrowser.open(stock_url.xueqiu_url)
                     webbrowser.open(stock_url.lixinger_url)
+                    webbrowser.open(stock_url.eastmoney_url)

@@ -13,6 +13,7 @@ class StockUrl(object):
         self.market_stock_code = self.market + code
         self.lixinger_url = conn.lixinger_url
         self.xueqiu_url = conn.xueqiu_url
+        self.eastmoney_url = conn.eastmoney_url
         self.__refresh()
 
     def __deal_market(self):
@@ -43,6 +44,13 @@ class StockUrl(object):
         """
         self.xueqiu_url = self.xueqiu_url.format(market_stock_code=self.market_stock_code)
 
+    def __deal_eastmoney_url(self):
+        """
+        根据代码转换东方财富的url
+        :return:
+        """
+        self.eastmoney_url = self.eastmoney_url.format(code=self.code)
+
     def __refresh(self):
         """
         将SotckUrl中的属性都处理并重新设置
@@ -51,6 +59,7 @@ class StockUrl(object):
         self.__deal_market()
         self.__deal_lixinger_url()
         self.__deal_xueqiu_url()
+        self.__deal_eastmoney_url()
 
     def __repr__(self):
         return str(self.__dict__)

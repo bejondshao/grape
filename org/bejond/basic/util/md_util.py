@@ -34,11 +34,14 @@ def to_url(stock_url, filtered_stock):
     """
     code转为markdown格式的雪球url
     name转为markdown格式的理性人url
+    date转为markdown格式的东方财富url
     :param cls: StockUrl对象
     :return:
     """
-    code_xueqiu_url = MD_URL.format(code=filtered_stock.code, url=stock_url.xueqiu_url)
-    name_lixinger_url = MD_URL.format(code=filtered_stock.name, url=stock_url.lixinger_url)
+    code_xueqiu_url = MD_URL.format(column=filtered_stock.code, url=stock_url.xueqiu_url)
+    name_lixinger_url = MD_URL.format(column=filtered_stock.name, url=stock_url.lixinger_url)
+    date_eastmoney_url =MD_URL.format(column=filtered_stock.date, url=stock_url.eastmoney_url)
     # 将过滤的股票的code转为url形式，输出到文件中
     filtered_stock.code = code_xueqiu_url
     filtered_stock.name = name_lixinger_url
+    filtered_stock.date = date_eastmoney_url
