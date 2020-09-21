@@ -6,7 +6,7 @@ class DataTotal(object):
 
     def __init__(self, cursor):
         """
-
+f
         :param cursor: 从数据库获取的Cursor类型，其中包含close属性
         """
         days = cursor.count()

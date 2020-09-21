@@ -49,7 +49,7 @@ def is_before_close_time():
 
 def save_stock_hist(checks=None, repair_days=0):
     """
-    更新股票历史，建议每日收盘后运行。因为收盘前运行当日数据会有误 TODO, 修改fetch日期，如果今天为交易日并且运行时间在收盘前，则不存储今天的数据
+    更新股票历史，建议每日收盘后运行。因为收盘前运行当日数据会有误
     :param checks: 临时更新某些股票的历史，节省时间。checks=None时更新所有股票历史
     :param repair_days 要修复的天数，默认是0。因为有时候会错误的在交易期间更新数据，而当天所有股票的最高价，最低价，收盘价有可能
     都是错误的，这回影响其他参数的计算。因此需要修复，填入一个数值，会删掉库里的最后n天记录，然后重新获取。
@@ -70,6 +70,8 @@ def save_stock_hist(checks=None, repair_days=0):
         end = dateu.get_previous_date()
     # 这里需要传end，如果是在交易日日中执行获取数据，则获取日期截止到前一个交易日，作为最新的交易日
     latest_trade_date_str = dateu.get_latest_trade_date_str(end)
+    # 存储当日获取股票列表
+    code_list = []
     for code in codes:
         last_date = None
         # persistence.database.drop_collection(code)
@@ -89,8 +91,8 @@ def save_stock_hist(checks=None, repair_days=0):
         else:  # 如果找到上次存储的日期且日期不是最近的交易日
             # next_trade_date = dateu.get_next_trade_date(last_date) # 获取下个交易日，is_holiday读取csv速度太慢，放弃
             # if next_trade_date < datetime.now():
-            print(i)
-            print(code)
+            print(str(i) + '. ' + code)
+            code_list.append(code)
             print('last_date ' + str(last_date))
             repeat = True
             while repeat:
@@ -119,8 +121,10 @@ def save_stock_hist(checks=None, repair_days=0):
             conn.collection_stock_hist.insert_many(json.loads(df_hist_data.to_json(orient='records')))
         i += 1
 
+        return code_list
 
-def repair_mas():
+
+def repair_mas(code_list=None):
     """
     只是用于修复之前获取的数据，并未求ma_30和ma_60。新数据库不会用到该函数。除非要增加新的平均线
     :return:
@@ -129,8 +133,9 @@ def repair_mas():
     i = 1
     collection = conn.collection_stock_hist
     for code in codes:
-        ma.repair_mas(collection, code, const.DAYS_ARRAY)
-        i += 1
+        if code_list is not None and code in code_list:
+            ma.repair_mas(collection, code, const.DAYS_ARRAY)
+            i += 1
 
 
 def repair_turnover():

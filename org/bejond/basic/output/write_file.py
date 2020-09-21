@@ -50,8 +50,8 @@ def write_head_up_to_post(list, new_table=False):
                 row = md_util.to_table_row(cls)
                 print(row)
                 file.write(row)
-            if len(stock_list) < 9:
+            if len(stock_list) < 20:
                 for stock_url in stock_list:
-                    # webbrowser.open(stock_url.xueqiu_url)
-                    webbrowser.open(stock_url.lixinger_url)
-                    webbrowser.open(stock_url.eastmoney_url)
+                    webbrowser.open(stock_url.xueqiu_url)
+                    # webbrowser.open(stock_url.lixinger_url)
+                    # webbrowser.open(stock_url.eastmoney_url)

@@ -49,6 +49,10 @@ def get_today():
 
 
 def get_today_int():
+    """
+    获取今天日期的int表示，例如20200712，所以计算一年前的日期需要-10000
+    :return:
+    """
     date = get_today_str(date_format_tight)
     return int(date)
 

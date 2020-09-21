@@ -11,7 +11,7 @@ from bejond.basic.output.write_file import write_head_up_to_post
 from bejond.basic.util import dateu
 
 
-def find_head_up(code=None, start=None, end=None, pb=None, pe=None, delta=60, filter_time=1.2, write_and_store=True):
+def find_head_up(code=None, start=None, end=None, pb=4, pe=40, delta=60, filter_time=1.5, write_and_store=True):
     """
     根据ma_60计算趋势，可以将计算结果代码，组合成url直接在某个网站打开。
     :param code:
@@ -20,6 +20,8 @@ def find_head_up(code=None, start=None, end=None, pb=None, pe=None, delta=60, fi
     :param pb:
     :param pe:
     :param delta:
+    :param filter_time:
+    :param write_and_store: 将结果存入数据库并写入博客中。测试时设为False
     :return:
     """
     print('\n')
@@ -30,8 +32,8 @@ def find_head_up(code=None, start=None, end=None, pb=None, pe=None, delta=60, fi
     # previous = dateu.get_previous_date_str(100) # 查找100天前上市的
     time_limit = dateu.get_today_int() - 10000 # 查找一年前上市的股票
     codes = conn.collection_stock_basics.find(
-        {'timeToMarket': {'$lt': time_limit}, 'pb': {'$lt': 2}, 'pe': {'$lt': 23, '$gt': 0}}, # 总资产小于500亿
-        {'code': 1, 'name': 1, 'industry': 1, 'area': 1, '_id': 0})  # codes为Cursor {'code': 'xxxxxx', 'name": 'xxxx', 'industry': 'xxxx', 'area': 'xx'}
+        {'timeToMarket': {'$lt': time_limit}, 'pb': {'$lt': pb}, 'pe': {'$lt': pe, '$gt': 0}}, # 总资产小于500亿
+        {'code': 1, 'name': 1, 'industry': 1, 'area': 1, 'pb': 1, 'pe': 1, '_id': 0})  # codes为Cursor {'code': 'xxxxxx', 'name": 'xxxx', 'industry': 'xxxx', 'area': 'xx'}
 
     code_date_list = []
     # 用于检查delta日期之内的股票
@@ -89,10 +91,13 @@ def find_head_up(code=None, start=None, end=None, pb=None, pe=None, delta=60, fi
                         fetched_stock = collection_stock_ma_head_up.find_one({'code':code, 'date': {'$gt' : delta_date}}) # delta_date在这里是str，所以后面的日期比前面的日期大
                         if fetched_stock is None:
                             stock_filtered = CodeMaHeadUp(code, name=code_cursor['name'], date=day.date, industry=code_cursor['industry'], area=code_cursor['area'], close=str(day.close), today=today)
-                            print("inserting: {0}, {1}".format(stock_filtered.code, stock_filtered.date))
+                            print("=================================================================================")
+                            print("inserting: {0}, {1}, {2}".format(stock_filtered.code, stock_filtered.name, stock_filtered.date))
+                            print("=================================================================================")
                             if write_and_store:
                                 collection_stock_ma_head_up.insert_one(stock_filtered.__dict__)
-                            code_date_list.append(stock_filtered)
+                                if code_cursor['pb'] < 4 and code_cursor['pe'] < 40:
+                                    code_date_list.append(stock_filtered)
                             break
                 # elif day_first.slope > 0:
                 #     break
