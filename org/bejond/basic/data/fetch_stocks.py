@@ -85,6 +85,7 @@ def save_stock_hist(checks=None, repair_days=0):
 
         if last_date is None:  # 如果数据库未找到上一次存储的日期，说明是新股票
             df_hist_data = tushare.get_hist_data(code, end=dateu.to_str(end))
+            code_list.append(code)
         elif last_date.__eq__(latest_trade_date_str):  # 如果last_date和最新交易日（如果今天此时时间不到收盘时间，则是上一个交易日。如果时间是收盘时间后，则是今天）一样，说明获取过，就跳过
             # elif last_date.__eq__(dateu.get_previous_date_str(1)): # 这一行是周六测试用，忽略
             continue
@@ -121,7 +122,7 @@ def save_stock_hist(checks=None, repair_days=0):
             conn.collection_stock_hist.insert_many(json.loads(df_hist_data.to_json(orient='records')))
         i += 1
 
-        return code_list
+    return code_list
 
 
 def repair_mas(code_list=None):
