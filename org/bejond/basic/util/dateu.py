@@ -157,6 +157,13 @@ def is_weekday(date_):
 
     return week_number <= 4
 
+def day_of_week_str(date_str):
+    date_ = datetime.datetime.strptime(date_str, date_format)
+    return day_of_week(date_)
+
+def day_of_week(date_):
+    week_number = datetime.datetime.isoweekday(date_)
+    return week_number
 
 def is_weekend_or_holiday_str(date_str):
     date_ = datetime.datetime.strptime(date_str, date_format)

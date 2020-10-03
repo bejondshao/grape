@@ -18,12 +18,16 @@ database = client[config.get('database', 'database_name')]
 stock_basics = config.get('collection', 'stock_basics')
 # 表名
 stock_hist = config.get('collection', 'stock_hist')
+# 表名
+stock_indexes = config.get('collection', 'stock_indexes')
 # stock_ma_head_up表名
 stock_ma_head_up = config.get('collection', 'stock_ma_head_up')
 # stock_basics表
 collection_stock_basics = database.get_collection(stock_basics)
 # stock_hist表
 collection_stock_hist = database.get_collection(stock_hist)
+# indexes表
+collection_stock_indexes = database.get_collection(stock_indexes)
 # stock_ma_head_up表
 collection_stock_ma_head_up = database.get_collection(stock_ma_head_up)
 

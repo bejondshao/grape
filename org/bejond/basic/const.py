@@ -2,6 +2,7 @@
 
 
 DAYS_ARRAY = [30, 60]
+INDEX_DAYS_ARRAY = [5, 10, 20, 30, 60]
 STOCK_HIST_COLUMNS = ['high', 'v_ma10', 'code', 'ma5', 'ma10', 'price_change', 'v_ma20', 'p_change',
                       'volume', 'ma20', 'low', 'date', 'close', '_id', 'open', 'v_ma5', 'turnover', 'ma_30', 'ma_60']
 '''
@@ -43,3 +44,7 @@ comments: false
 **声明：grape选股策略在不断调整和丰富，股票列表仅记录用，不作为任何投资建议。依据列表选股投资导致亏损本人概不负责。**
 """
 MD_URL = '[{column}]({url})'
+GTIMG_URL = 'http://web.ifzq.gtimg.cn/appstock/app/fqkline/get?param={code},day,{date},,6000,qfq'
+#           上证指数，    深证成指，   创业板指，   沪深300ETF， 沪深300
+STOCK_INDEXES = ['sh000001', 'sz399001', 'sz399006', 'sh515390', 'sh000300', 'sz002292', 'sz000977', 'sz000040', 'sh512010']
+# STOCK_INDEXES = ['sz399006']
